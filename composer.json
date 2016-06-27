@@ -1,0 +1,21 @@
+{
+    "name": "ngurajeka/ngquery",
+    "description": "Like query builder, but it is define by a class",
+    "type": "library",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ady Rahmat MA",
+            "email": "ngurajeka.92@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Ng\\Query": "src"
+        }
+    }
+}
