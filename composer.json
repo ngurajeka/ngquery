@@ -2,6 +2,7 @@
     "name": "ngurajeka/ngquery",
     "description": "Like query builder, but it is define by a class",
     "type": "library",
+    "version": "1.0",
     "require": {
         "php": ">=5.4.0"
     },

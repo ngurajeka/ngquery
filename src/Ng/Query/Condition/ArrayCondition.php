@@ -24,7 +24,7 @@ use Ng\Query\ConditionInterface;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-class SimpleCondition implements ConditionInterface
+class ArrayCondition implements ConditionInterface
 {
     const CON_AND   = "AND";
     const CON_OR    = "OR";
@@ -36,6 +36,10 @@ class SimpleCondition implements ConditionInterface
 
     public function __construct($field, $operator, $value, $conjunction=self::CON_AND)
     {
+        if (!is_array($value)) {
+            throw new Exception("Value should be an array");
+        }
+
         $this->field        = $field;
         $this->operator     = $operator;
         $this->value        = $value;
@@ -79,8 +83,9 @@ class SimpleCondition implements ConditionInterface
     // receiving parameter useConjunction as bool
     public function toString($useConjunction)
     {
-        $str = sprintf(
-            "(%s %s %s)", $this->getField(), $this->getOperator(), $this->getValue()
+        $value  = join(",", $this->getValue());
+        $str    = sprintf(
+            "(%s %s (%s))", $this->getField(), $this->getOperator(), $value
         );
 
         if ($useConjunction === true) {

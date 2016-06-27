@@ -73,6 +73,7 @@ class Query
         }
 
         foreach ($this->getConditions() as $condition) {
+            /** @type ConditionInterface $condition */
             $conditions[] = $condition->toArray();
         }
 
@@ -87,6 +88,7 @@ class Query
         }
 
         foreach ($this->getConditions() as $condition) {
+            /** @type ConditionInterface $condition */
             $conditions .= $condition->toString(!empty($conditions));
         }
 
@@ -101,13 +103,14 @@ class Query
         }
 
         foreach ($this->getOrders() as $order) {
+            /** @type OrderInterface $order */
             $orders[] = $order->toArray();
         }
 
         return $orders;
     }
 
-    public function conditionToString()
+    public function orderToString()
     {
         $orders = "";
         if (!$this->hasOrders()) {
@@ -115,6 +118,7 @@ class Query
         }
 
         foreach ($this->getOrders() as $order) {
+            /** @type OrderInterface $order */
             $orders .= $order->toString(!empty($orders));
         }
 
