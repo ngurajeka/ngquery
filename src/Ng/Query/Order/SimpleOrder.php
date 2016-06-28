@@ -61,7 +61,7 @@ class SimpleOrder implements OrderInterface
     // receiving parameter useConjunction as bool
     public function toString($useComma)
     {
-        $str = sprintf("(%s %s)", $this->getField(), $this->getOrder());
+        $str = sprintf("%s %s", $this->getField(), $this->getOrder());
         if ($useComma === true) {
             $str = sprintf(", %s", $str);
         }
