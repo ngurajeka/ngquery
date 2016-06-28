@@ -80,7 +80,7 @@ class SimpleCondition implements ConditionInterface
     public function toString($useConjunction)
     {
         $str = sprintf(
-            "(%s %s %s)", $this->getField(), $this->getOperator(), $this->getValue()
+            "(%s %s '%s')", $this->getField(), $this->getOperator(), $this->getValue()
         );
 
         if ($useConjunction === true) {
