@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * Helpers Module
  *
  * PHP Version 5.4.x
  *
@@ -10,11 +10,11 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query;
+namespace Ng\Query\Helpers;
 
 
 /**
- * Query Module
+ * Helpers Module
  *
  * @category Library
  * @package  Library
@@ -31,4 +31,5 @@ class Operator
     const OP_LESS_THAN_OR_EQUALS    = "<=";
     const OP_IN                     = "IN";
     const OP_NOT                    = "<>";
+    const OP_LIKE                   = "LIKE";
 }

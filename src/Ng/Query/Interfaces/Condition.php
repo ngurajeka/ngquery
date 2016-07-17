@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * Condition Interfaces
  *
  * PHP Version 5.4.x
  *
@@ -10,11 +10,11 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query;
+namespace Ng\Query\Interfaces;
 
 
 /**
- * Query Module
+ * Condition Interfaces
  *
  * @category Library
  * @package  Library
@@ -22,16 +22,33 @@ namespace Ng\Query;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-interface ConditionInterface
+interface Condition
 {
-    // get the conjunction of the condition
-    // like (AND) / (OR)
+    const CON_AND   = "AND";
+    const CON_OR    = "OR";
+
+    /**
+     * Get the conjunction of the condition
+     * like (AND) / (OR)
+     *
+     * @return string
+     */
     public function getConjunction();
 
-    // extracting the condition as an array
+    /**
+     * Extracting the condition as an array
+     *
+     * @return array
+     */
     public function toArray();
 
-    // extracting the condition as a string
-    // receiving parameter useConjunction as bool
+    /**
+     * Extracting the condition as a string
+     * receiving parameter useConjunction as bool
+     *
+     * @param bool $useConjunction Option to use conjunction or not
+     *
+     * @return string
+     */
     public function toString($useConjunction);
 }

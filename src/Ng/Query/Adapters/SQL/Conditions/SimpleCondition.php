@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * SimpleCondition Module
  *
  * PHP Version 5.4.x
  *
@@ -10,13 +10,13 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query\Condition;
+namespace Ng\Query\Adapters\SQL\Conditions;
 
 
-use Ng\Query\ConditionInterface;
+use Ng\Query\Interfaces\Condition;
 
 /**
- * Query Module
+ * SimpleCondition Module
  *
  * @category Library
  * @package  Library
@@ -24,22 +24,26 @@ use Ng\Query\ConditionInterface;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-class SimpleCondition implements ConditionInterface
+class SimpleCondition implements Condition
 {
-    const CON_AND   = "AND";
-    const CON_OR    = "OR";
-
     protected $field;
     protected $operator;
     protected $value;
     protected $conjunction;
 
-    public function __construct($field, $operator, $value, $conjunction=self::CON_AND)
-    {
+    public function __construct(
+        $field, $operator, $value, $conjunction=Condition::CON_AND
+    ) {
         $this->field        = $field;
         $this->operator     = $operator;
         $this->value        = $value;
         $this->conjunction  = $conjunction;
+    }
+
+    public function setField($field)
+    {
+        $this->field        = $field;
+        return $this;
     }
 
     public function getField()
@@ -47,9 +51,21 @@ class SimpleCondition implements ConditionInterface
         return $this->field;
     }
 
+    public function setOperator($operator)
+    {
+        $this->operator     = $operator;
+        return $this;
+    }
+
     public function getOperator()
     {
         return $this->operator;
+    }
+
+    public function setValue($value)
+    {
+        $this->value        = $value;
+        return $this;
     }
 
     public function getValue()
@@ -57,14 +73,17 @@ class SimpleCondition implements ConditionInterface
         return $this->value;
     }
 
-    // get the conjunction of the condition
-    // like (AND) / (OR)
+    public function setConjunction($conjunction)
+    {
+        $this->conjunction  = $conjunction;
+        return $this;
+    }
+
     public function getConjunction()
     {
         return $this->conjunction;
     }
 
-    // extracting the condition as an array
     public function toArray()
     {
         return array(
@@ -75,8 +94,6 @@ class SimpleCondition implements ConditionInterface
         );
     }
 
-    // extracting the condition as a string
-    // receiving parameter useConjunction as bool
     public function toString($useConjunction)
     {
         $str = sprintf(
@@ -84,7 +101,7 @@ class SimpleCondition implements ConditionInterface
         );
 
         if ($useConjunction === true) {
-            $str = sprintf("%s %s", $this->getConjunction(), $str);
+            $str = sprintf(" %s %s", $this->getConjunction(), $str);
         }
 
         return $str;

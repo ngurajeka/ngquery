@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * SimpleOrder Module
  *
  * PHP Version 5.4.x
  *
@@ -10,13 +10,13 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query\Order;
+namespace Ng\Query\Adapters\SQL\Orders;
 
 
-use Ng\Query\OrderInterface;
+use Ng\Query\Interfaces\Order;
 
 /**
- * Query Module
+ * SimpleOrder Module
  *
  * @category Library
  * @package  Library
@@ -24,18 +24,21 @@ use Ng\Query\OrderInterface;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-class SimpleOrder implements OrderInterface
+class SimpleOrder implements Order
 {
-    const ORDER_ASC     = "ASC";
-    const ORDER_DESC    = "DESC";
-
     protected $field;
     protected $order;
 
-    public function __construct($field, $order=self::ORDER_DESC)
+    public function __construct($field, $order=Order::ORDER_DESC)
     {
         $this->field    = $field;
         $this->order    = $order;
+    }
+
+    public function setField($field)
+    {
+        $this->field    = $field;
+        return $this;
     }
 
     public function getField()
@@ -43,12 +46,17 @@ class SimpleOrder implements OrderInterface
         return $this->field;
     }
 
+    public function setOrder($order)
+    {
+        $this->order    = $order;
+        return $this;
+    }
+
     public function getOrder()
     {
         return $this->order;
     }
 
-    // extracting the condition as an array
     public function toArray()
     {
         return array(
@@ -57,8 +65,6 @@ class SimpleOrder implements OrderInterface
         );
     }
 
-    // extracting the condition as a string
-    // receiving parameter useConjunction as bool
     public function toString($useComma)
     {
         $str = sprintf("(%s %s)", $this->getField(), $this->getOrder());

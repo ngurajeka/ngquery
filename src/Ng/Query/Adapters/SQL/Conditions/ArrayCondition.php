@@ -10,10 +10,11 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query\Condition;
+namespace Ng\Query\Adapters\SQL\Conditions;
 
 
-use Ng\Query\ConditionInterface;
+use Ng\Query\Exceptions\Exception;
+use Ng\Query\Interfaces\Condition;
 
 /**
  * Query Module
@@ -24,63 +25,20 @@ use Ng\Query\ConditionInterface;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-class ArrayCondition implements ConditionInterface
+class ArrayCondition extends SimpleCondition
 {
-    const CON_AND   = "AND";
-    const CON_OR    = "OR";
+    const INVALID_VALUE = "Invalid Value. Value Should be an Array";
 
-    protected $field;
-    protected $operator;
-    protected $value;
-    protected $conjunction;
-
-    public function __construct($field, $operator, $value, $conjunction=self::CON_AND)
-    {
+    public function __construct(
+        $field, $operator, array $value, $conjunction=Condition::CON_AND
+    ) {
         if (!is_array($value)) {
-            throw new Exception("Value should be an array");
+            throw new Exception(self::INVALID_VALUE);
         }
 
-        $this->field        = $field;
-        $this->operator     = $operator;
-        $this->value        = $value;
-        $this->conjunction  = $conjunction;
+        parent::__construct($field, $operator, $value, $conjunction);
     }
 
-    public function getField()
-    {
-        return $this->field;
-    }
-
-    public function getOperator()
-    {
-        return $this->operator;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    // get the conjunction of the condition
-    // like (AND) / (OR)
-    public function getConjunction()
-    {
-        return $this->conjunction;
-    }
-
-    // extracting the condition as an array
-    public function toArray()
-    {
-        return array(
-            "field"         => $this->getField(),
-            "operator"      => $this->getOperator(),
-            "value"         => $this->getValue(),
-            "conjunction"   => $this->getConjunction(),
-        );
-    }
-
-    // extracting the condition as a string
-    // receiving parameter useConjunction as bool
     public function toString($useConjunction)
     {
         $value  = join(",", $this->getValue());
@@ -89,7 +47,7 @@ class ArrayCondition implements ConditionInterface
         );
 
         if ($useConjunction === true) {
-            $str = sprintf("%s %s", $this->getConjunction(), $str);
+            $str = sprintf(" %s %s", $this->getConjunction(), $str);
         }
 
         return $str;
