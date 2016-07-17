@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * Query Exceptions
  *
  * PHP Version 5.4.x
  *
@@ -10,11 +10,11 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query\Condition;
+namespace Ng\Query\Exceptions;
 
 
 /**
- * Query Module
+ * Query Exceptions
  *
  * @category Library
  * @package  Library

@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * Order Interfaces
  *
  * PHP Version 5.4.x
  *
@@ -10,11 +10,11 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query;
+namespace Ng\Query\Interfaces;
 
 
 /**
- * Query Module
+ * Order Interfaces
  *
  * @category Library
  * @package  Library
@@ -22,12 +22,25 @@ namespace Ng\Query;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-interface OrderInterface
+interface Order
 {
-    // extracting the order as an array
+    const ORDER_ASC     = "ASC";
+    const ORDER_DESC    = "DESC";
+
+    /**
+     * Extracting the order as an array
+     *
+     * @return array
+     */
     public function toArray();
 
-    // extracting the order as a string
-    // receive parameter useComma as bool
+    /**
+     * Extracting the order as a string
+     * receive parameter useComma as bool
+     *
+     * @param bool $useComma Option to use comma or not
+     *
+     * @return string
+     */
     public function toString($useComma);
 }

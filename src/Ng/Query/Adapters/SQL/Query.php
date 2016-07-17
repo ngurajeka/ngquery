@@ -1,6 +1,6 @@
 <?php
 /**
- * Query Module
+ * SQLQuery Module
  *
  * PHP Version 5.4.x
  *
@@ -10,11 +10,15 @@
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-namespace Ng\Query;
+namespace Ng\Query\Adapters\SQL;
 
+
+use Ng\Query\Interfaces\Condition;
+use Ng\Query\Interfaces\Order;
+use Ng\Query\Interfaces\Query as QueryInterface;
 
 /**
- * Query Module
+ * SQLQuery Module
  *
  * @category Library
  * @package  Library
@@ -22,7 +26,7 @@ namespace Ng\Query;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/ngurajeka/ngquery
  */
-class Query
+class Query implements QueryInterface
 {
     protected $conditions   = array();
     protected $orders       = array();
@@ -35,7 +39,7 @@ class Query
     {
         $args   = func_get_args();
         $append = function($condition) {
-            if ($condition instanceOf ConditionInterface) {
+            if ($condition instanceOf Condition) {
                 $this->addCondition($condition);
             }
         };
@@ -43,16 +47,16 @@ class Query
         array_walk($args, $append);
     }
 
-    public function addCondition(ConditionInterface $conditionInterface)
+    public function addCondition(Condition $condition)
     {
-        $this->conditions[] = $conditionInterface;
+        $this->conditions[] = $condition;
     }
 
     public function appendOrder()
     {
         $args   = func_get_args();
         $append = function($order) {
-            if ($order instanceOf OrderInterface) {
+            if ($order instanceOf Order) {
                 $this->addOrder($order);
             }
         };
@@ -60,12 +64,19 @@ class Query
         array_walk($args, $append);
     }
 
-    public function addOrder(OrderInterface $orderInterface)
+    public function addOrder(Order $order)
     {
-        $this->orders[] = $orderInterface;
+        $this->orders[] = $order;
     }
 
-    public function conditionToArray()
+    public function merge(QueryInterface $query)
+    {
+        foreach ($query->getConditions() as $condition) {
+            $this->addCondition($condition);
+        }
+    }
+
+    public function toArray()
     {
         $conditions = array();
         if (!$this->hasConditions()) {
@@ -73,14 +84,14 @@ class Query
         }
 
         foreach ($this->getConditions() as $condition) {
-            /** @type ConditionInterface $condition */
+            /** @type Condition $condition */
             $conditions[] = $condition->toArray();
         }
 
         return $conditions;
     }
 
-    public function conditionToString()
+    public function toString()
     {
         $conditions = "";
         if (!$this->hasConditions()) {
@@ -88,29 +99,14 @@ class Query
         }
 
         foreach ($this->getConditions() as $condition) {
-            /** @type ConditionInterface $condition */
+            /** @type Condition $condition */
             $conditions .= $condition->toString(!empty($conditions));
         }
 
         return $conditions;
     }
 
-    public function orderToArray()
-    {
-        $orders = array();
-        if (!$this->hasOrders()) {
-            return $orders;
-        }
-
-        foreach ($this->getOrders() as $order) {
-            /** @type OrderInterface $order */
-            $orders[] = $order->toArray();
-        }
-
-        return $orders;
-    }
-
-    public function orderToString()
+    public function stringifyOrder()
     {
         $orders = "";
         if (!$this->hasOrders()) {
@@ -118,7 +114,7 @@ class Query
         }
 
         foreach ($this->getOrders() as $order) {
-            /** @type OrderInterface $order */
+            /** @type Order $order */
             $orders .= $order->toString(!empty($orders));
         }
 
@@ -135,11 +131,17 @@ class Query
         return !empty($this->orders);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getConditions()
     {
         return $this->conditions;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrders()
     {
         return $this->orders;
