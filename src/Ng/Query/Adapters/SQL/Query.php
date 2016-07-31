@@ -31,9 +31,18 @@ class Query implements QueryInterface
     protected $conditions   = array();
     protected $orders       = array();
 
-    protected $offset       = 0;
-    protected $limit        = 10;
-    protected $number       = 1;
+    protected $offset;
+    protected $limit;
+    protected $number;
+
+    public function __construct($auto=true)
+    {
+        if ($auto) {
+            $this->offset   = 0;
+            $this->limit    = 10;
+            $this->number   = 1;
+        }
+    }
 
     public function appendCondition()
     {
