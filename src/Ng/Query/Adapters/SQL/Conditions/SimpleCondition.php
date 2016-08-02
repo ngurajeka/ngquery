@@ -96,8 +96,9 @@ class SimpleCondition implements Condition
 
     public function toString($useConjunction)
     {
+        $str = "(%s %s '%s')";
         $str = sprintf(
-            "(%s %s %s)", $this->getField(), $this->getOperator(), $this->getValue()
+            $str, $this->getField(), $this->getOperator(), $this->getValue()
         );
 
         if ($useConjunction === true) {
