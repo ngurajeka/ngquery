@@ -167,7 +167,9 @@ class QueryStringBuilder
 
     protected function addPageNumber($pageNumber)
     {
-        $this->query->setOffset((int) $pageNumber);
+        $size   = $this->query->getLimit();
+        $offset = ($pageNumber - 1) * $size;
+        $this->query->setOffset($offset);
     }
 
     public function getQuery()
