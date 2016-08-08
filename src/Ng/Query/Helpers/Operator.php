@@ -32,4 +32,21 @@ class Operator
     const OP_IN                     = "IN";
     const OP_NOT                    = "<>";
     const OP_LIKE                   = "LIKE";
+
+    public static function getOperators()
+    {
+        $operators = array(
+            self::OP_EQUALS,
+            self::OP_GREATER_THAN,
+            self::OP_GREATER_THAN_OR_EQUALS,
+            self::OP_LESS_THAN_OR_EQUALS,
+            self::OP_LESS_THAN,
+            self::OP_IN,
+            self::OP_NOT,
+            self::OP_LIKE,
+        );
+
+        return $operators;
+    }
+
 }
