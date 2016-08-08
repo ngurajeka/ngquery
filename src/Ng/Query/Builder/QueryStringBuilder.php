@@ -4,6 +4,7 @@ namespace Ng\Query\Builder;
 
 use Ng\Query\Adapters\SQL\Conditions\ArrayCondition;
 use Ng\Query\Adapters\SQL\Conditions\SimpleCondition;
+use Ng\Query\Adapters\SQL\Orders\SimpleOrder;
 use Ng\Query\Adapters\SQL\Query;
 use Ng\Query\Helpers\Operator;
 
@@ -34,6 +35,8 @@ class QueryStringBuilder
     public function build()
     {
         $this->extractFilter();
+        $this->extractOrder();
+        $this->extractPage();
     }
 
     protected function addSimpleCondition($field, $operator, $value)
@@ -112,9 +115,71 @@ class QueryStringBuilder
         return explode($delimiter, $str);
     }
 
+    protected function extractOrder()
+    {
+        if (!array_key_exists("sort", $this->source)) {
+            return;
+        }
+
+        if (is_array($this->source["sort"])) {
+            return;
+        }
+
+        $unsorted = $this->source["sort"];
+        $this->buildOrder($unsorted);
+    }
+
+    protected function buildOrder($unsorted)
+    {
+        $order = substr($unsorted, 0, 1);
+        switch ($order) {
+        case "+":
+            $this->addOrder(substr($unsorted, 1), "ASC");
+            break;
+        case "-":
+            $this->addOrder(substr($unsorted, 1), "DESC");
+            break;
+        default:
+            $this->addOrder($unsorted, "ASC");
+            break;
+        }
+    }
+
+    protected function addOrder($field, $order)
+    {
+        $this->query->addOrder(new SimpleOrder($field, $order));
+    }
+
+    protected function extractPage()
+    {
+        if (array_key_exists("pageSize", $this->source)) {
+            $this->addPageSize($this->source["pageSize"]);
+        }
+        if (array_key_exists("pageNumber", $this->source)) {
+            $this->addPageNumber($this->source["pageNumber"]);
+        }
+    }
+
+    protected function addPageSize($pageSize)
+    {
+        if (!is_integer($pageSize)) {
+            return;
+        }
+
+        $this->query->setLimit($pageSize);
+    }
+
+    protected function addPageNumber($pageNumber)
+    {
+        if (!is_integer($pageNumber)) {
+            return;
+        }
+
+        $this->query->setOffset($pageNumber);
+    }
+
     public function getQuery()
     {
         return $this->query;
     }
-
 }
