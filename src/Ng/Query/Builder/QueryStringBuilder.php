@@ -162,20 +162,12 @@ class QueryStringBuilder
 
     protected function addPageSize($pageSize)
     {
-        if (!is_integer($pageSize)) {
-            return;
-        }
-
-        $this->query->setLimit($pageSize);
+        $this->query->setLimit((int) $pageSize);
     }
 
     protected function addPageNumber($pageNumber)
     {
-        if (!is_integer($pageNumber)) {
-            return;
-        }
-
-        $this->query->setOffset($pageNumber);
+        $this->query->setOffset((int) $pageNumber);
     }
 
     public function getQuery()
