@@ -169,6 +169,7 @@ class QueryStringBuilder
     {
         $size   = $this->query->getLimit();
         $offset = ($pageNumber - 1) * $size;
+		$this->query->setNumber($pageNumber);
         $this->query->setOffset($offset);
     }
 
